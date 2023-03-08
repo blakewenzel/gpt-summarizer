@@ -130,3 +130,6 @@ dmypy.json
 
 # VIM swap files
 .swp
+
+# Jargon.txt file
+jargon.txt
