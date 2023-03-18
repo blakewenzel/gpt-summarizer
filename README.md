@@ -21,23 +21,23 @@ A Python script that utilizes OpenAI's GPT-3.5-turbo model to process and summar
 ## Installation
 
 1. Clone this repository (or download and extract the ZIP file).
-```
+```shell
 $ git clone https://github.com/blakewenzel/gpt-summarizer.git
 ```
 
 2. Install the required libraries
-```
+```shell
 $ pip install -r requirements.txt
 ```
 
 3. Set up your OpenAI API credentials as environmental variables on your operating system. You will need `OPENAI_ORG_ID` and `OPENAI_API_KEY`.
-```
+```shell
 $ export OPENAI_ORG_ID=YOUR_ORG_ID_HERE
 $ export OPENAI_API_KEY=YOUR_API_KEY_HERE
 ```
 
 ## Usage
-```
+```shell
 $ python summarize.py [-h] [-o [OUTPUT_FILE]] [-t [TOPICS]] [-s] input_file
 ```
 
@@ -46,7 +46,7 @@ $ python summarize.py [-h] [-o [OUTPUT_FILE]] [-t [TOPICS]] [-s] input_file
 The summary will be output to a text file in the same directory as the input file with the same name appended with `_output.txt` unless the output file option is used.
 
 ### Options
-```
+```shell
   -h, --help            show this help message and exit
   -o [OUTPUT_FILE], --output_file [OUTPUT_FILE]
                         The output file where the results will be saved.
