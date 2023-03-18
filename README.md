@@ -30,7 +30,7 @@ python summarize.py [-h] [-o [OUTPUT_FILE]] [-t [TOPICS]] [-s] input_file
 
 `input_file` is the path to the text file you want to summarize.
 
-The summary will be output to a text file in the same directory as the input file with the same name and a `.txt` extension unless the output file option is used.
+The summary will be output to a text file in the same directory as the input file with the same name appended with `_output.txt` unless the output file option is used.
 
 ### Options
 ```
