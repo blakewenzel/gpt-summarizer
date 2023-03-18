@@ -60,3 +60,11 @@ The summary will be output to a text file in the same directory as the input fil
 ### Jargon Replacement
 
 You can add jargon replacement terms by creating a file called `jargon.txt` in the same directory as the script. Each line should contain two strings separated by a comma. The first string is the jargon term to replace, and the second string is the replacement.
+
+Example `jargon.txt`:
+```txt
+AI,Artificial Intelligence
+ML,Machine Learning
+Sean,Shawn
+Sarah,Sara
+```
