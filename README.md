@@ -1,6 +1,15 @@
 # GPT Summarizer
 
-A Python script to summarize the content of a VTT (Web Video Text Tracks) file using OpenAI's GPT-3 language model.
+A Python script that utilizes OpenAI's GPT-3.5-turbo model to process and summarize text files.
+
+## Features
+* Paraprhases input text into bullet point statements.
+* Sorts notes by specified topics or auto-generate topics.
+* Summarizes text files into key takeaways and action items.
+* Replaces jargon using a custom list. Useful for replacing incorrectly transcribed words or names.
+* Supports VTT (Web Video Text Tracks) files.
+* Optimizes input text to remove blank lines, whitespace, VTT tags, and timestamps before feeding into OpenAI to reduce costs.
+* Supports long form text, such as from meeting transcripts. Will automatically separate input text into sections to be processed OpenAI in batches.
 
 ## Requirements
 
@@ -15,19 +24,29 @@ A Python script to summarize the content of a VTT (Web Video Text Tracks) file u
 3. Set up your OpenAI API credentials as environmental variables on your operating system. You will need `OPENAI_ORG_ID` and `OPENAI_API_KEY`.
 
 ## Usage
+```
+python summarize.py [-h] [-o [OUTPUT_FILE]] [-t [TOPICS]] [-s] input_file
+```
 
-1. Run the script using `python summarize_vtt.py [VTT_FILE]` where `[VTT_FILE]` is the path to the VTT file you want to summarize. If no file is provided, the script will attempt to find the newest VTT file in your Downloads folder.
-2. The summary will be output to a text file in the same directory as the VTT file with the same name and a `.txt` extension.
+`input_file` is the path to the text file you want to summarize.
 
-### Customizations
+The summary will be output to a text file in the same directory as the input file with the same name and a `.txt` extension unless the output file option is used.
 
-The following constants can be customized at the top of the `summarize_vtt.py` file:
+### Options
+```
+  -h, --help            show this help message and exit
+  -o [OUTPUT_FILE], --output_file [OUTPUT_FILE]
+                        The output file where the results will be saved.
+  -t [TOPICS], --topics [TOPICS]
+                        Sort notes by topic. Provide a comma-separated list of topics or use 'auto' to automatically generate topics.
+  -s, --summary         Generate a summary of the notes to be included in the output file.
 
-* `MODEL_NAME`: the name of the GPT-3 model to use (default is `"gpt-3.5-turbo"`).
-* `SECTION_LENGTH`: the maximum length (in tokens) of each section of text passed to the GPT-3 model (default is `3000`).
-* `OVERLAP`: the number of tokens of overlap between each section of text (default is `50`).
+```
 
-Additionally, you can add jargon replacement terms by creating a file called `jargon.txt` in the same directory as the script. Each line should contain two strings separated by a comma. The first string is the jargon term to replace, and the second string is the replacement.
+
+### Jargon Replacement
+
+You can add jargon replacement terms by creating a file called `jargon.txt` in the same directory as the script. Each line should contain two strings separated by a comma. The first string is the jargon term to replace, and the second string is the replacement.
 
 ## License
 
