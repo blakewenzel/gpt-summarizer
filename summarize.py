@@ -100,6 +100,7 @@ def replace_jargon(text,jargon_file):
 
     return text
 
+
 def call_openai_model(prompt,max_tokens):
     try:
         # Call the openai model with the section as input
@@ -117,6 +118,7 @@ def call_openai_model(prompt,max_tokens):
             f"Error: OpenAI API call failed with status code {e.status_code} and message: {e.message}")
         sys.exit(1)
     return response.choices[0].message.content
+
 
 def process_sections(text):
     print(
