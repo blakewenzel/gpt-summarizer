@@ -38,7 +38,7 @@ $ export OPENAI_API_KEY=YOUR_API_KEY_HERE
 
 ## Usage
 ```shell
-$ summarize.py [-h] [-o [OUTPUT_FILE]] [-j [JARGON_FILE]] [-t [TOPICS]] [-s] input_file
+$ python summarize.py input_file
 ```
 
 `input_file` is the path to the text file you want to summarize.
@@ -46,6 +46,10 @@ $ summarize.py [-h] [-o [OUTPUT_FILE]] [-j [JARGON_FILE]] [-t [TOPICS]] [-s] inp
 The summary will be output to a text file in the same directory as the input file with the same name appended with `_output.txt` unless the output file option is used.
 
 ### Options
+```shell
+$ python summarize.py [-h] [-o [OUTPUT_FILE]] [-j [JARGON_FILE]] [-t [TOPICS]] [-s] input_file
+```
+
 ```shell
   -h, --help            show this help message and exit
   -o [OUTPUT_FILE], --output_file [OUTPUT_FILE]
