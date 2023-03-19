@@ -1,6 +1,6 @@
 # GPT Summarizer
 
-A Python script that utilizes OpenAI's GPT-3.5-turbo model to process and summarize text files.
+A Python script that utilizes OpenAI's GPT-3.5-turbo model to process and summarize long-form text files.
 
 ## Features
 * Paraphrases input text into bullet point statements
