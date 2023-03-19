@@ -50,10 +50,12 @@ def parse_arguments():
     parser.add_argument("input_file", help="The input text file to process.")
     parser.add_argument("-o", "--output_file", nargs="?",
                         help="The output file where the results will be saved. If omitted, the output file will be named the same as the input file, but appended with '_output' and always have a '.txt' extension.")
-    parser.add_argument("-t", "--topics", nargs="?", const="prompt", default="prompt",
+    parser.add_argument("-j", "--jargon_file", nargs="?", const="jargon.txt",
+                        help="Replace jargon terms before processing text. Will check for jargon.txt in the current working directory unless another file location is specified.")
+    parser.add_argument("-t", "--topics", nargs="?", const="prompt",
                         help="Sort notes by topic. Provide a comma-separated list of topics or use 'auto' to automatically generate topics. Default is 'prompt' which will ask for the list at runtime.")
     parser.add_argument("-s", "--summary", action="store_true",
-                        help="Generate a summary of the notes.")
+                        help="Generate a summary of the notes and include in the output file.")
     return parser.parse_args()
 
 
@@ -71,11 +73,15 @@ def clean_input_text(text):
     return text
 
 
-def replace_jargon(text):
+def replace_jargon(text,jargon_file):
+    if jargon_file is None:
+        # Skip replacing jargon
+        return text
+    
     # Check if jargon.txt file exists
-    if os.path.isfile('jargon.txt'):
+    if os.path.isfile(jargon_file):
         # Read jargon strings and replacements from file
-        with open('jargon.txt', 'r') as f:
+        with open(jargon_file, 'r') as f:
             jargon_pairs = [tuple(line.strip().split(','))
                             for line in f.readlines()]
 
@@ -271,6 +277,7 @@ def main():
     # Assign values based on user input
     args = parse_arguments()
     input_file = args.input_file
+    jargon_file = args.jargon_file
     output_file = args.output_file
     topics = args.topics
     generate_summary = args.summary
@@ -284,7 +291,7 @@ def main():
 
     # Process the input file and tokenize it
     clean_text = clean_input_text(input_text)
-    clean_text = replace_jargon(clean_text)
+    clean_text = replace_jargon(clean_text,jargon_file)
 
     # Process sections of text
     full_notes = process_sections(clean_text)
