@@ -50,23 +50,10 @@ def parse_arguments():
     parser.add_argument("input_file", help="The input text file to process.")
     parser.add_argument("-o", "--output_file", nargs="?",
                         help="The output file where the results will be saved. If omitted, the output file will be named the same as the input file, but appended with '_output' and always have a '.txt' extension.")
-    parser.add_argument("-t", "--topics", nargs="?", const="auto",
-                        help="Sort notes by topic. Provide a comma-separated list of topics or use 'auto' to automatically generate topics.")
+    parser.add_argument("-t", "--topics", nargs="?", const="prompt", default="prompt",
+                        help="Sort notes by topic. Provide a comma-separated list of topics or use 'auto' to automatically generate topics. Default is 'prompt' which will ask for the list at runtime.")
     parser.add_argument("-s", "--summary", action="store_true",
                         help="Generate a summary of the notes.")
-    return parser.parse_args()
-
-
-def parse_arguments():
-    parser = argparse.ArgumentParser(
-        description="Process text file and create summaries using OpenAI.")
-    parser.add_argument("input_file", help="The input text file to process.")
-    parser.add_argument("-o", "--output_file", nargs="?",
-                        help="The output file where the results will be saved.")
-    parser.add_argument("-t", "--topics", nargs="?", const="auto",
-                        help="Sort notes by topic. Provide a comma-separated list of topics or use 'auto' to automatically generate topics.")
-    parser.add_argument("-s", "--summary", action="store_true",
-                        help="Generate a summary of the notes to be included in the output file.")
     return parser.parse_args()
 
 
@@ -288,6 +275,10 @@ def main():
     topics = args.topics
     generate_summary = args.summary
 
+    # Prompt user for topics if needed
+    if(topics == "prompt"):
+        topics = input("What topics would you like to sort notes by? ")
+
     # Read input text from file
     input_text = get_input_text(input_file)
 
@@ -299,6 +290,7 @@ def main():
     full_notes = process_sections(clean_text)
 
     # Sort notes by topic (if requested)
+
     sorted_notes = sort_by_topic(full_notes, topics)
 
     # Summarize notes and combine with sorted_notes if requested

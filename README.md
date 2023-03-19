@@ -49,11 +49,10 @@ The summary will be output to a text file in the same directory as the input fil
 ```shell
   -h, --help            show this help message and exit
   -o [OUTPUT_FILE], --output_file [OUTPUT_FILE]
-                        The output file where the results will be saved.
+                        The output file where the results will be saved. If omitted, the output file will be named the same as the input file, but appended with '_output' and always have a '.txt' extension.
   -t [TOPICS], --topics [TOPICS]
-                        Sort notes by topic. Provide a comma-separated list of topics or use 'auto' to automatically generate topics.
-  -s, --summary         Generate a summary of the notes to be included in the output file.
-
+                        Sort notes by topic. Provide a comma-separated list of topics or use 'auto' to automatically generate topics. Default is 'prompt' which will ask for the list at runtime.
+  -s, --summary         Generate a summary of the notes.
 ```
 
 
