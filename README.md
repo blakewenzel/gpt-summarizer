@@ -38,7 +38,7 @@ $ export OPENAI_API_KEY=YOUR_API_KEY_HERE
 
 ## Usage
 ```shell
-$ python summarize.py [-h] [-o [OUTPUT_FILE]] [-t [TOPICS]] [-s] input_file
+$ summarize.py [-h] [-o [OUTPUT_FILE]] [-j [JARGON_FILE]] [-t [TOPICS]] [-s] input_file
 ```
 
 `input_file` is the path to the text file you want to summarize.
