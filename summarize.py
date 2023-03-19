@@ -29,6 +29,7 @@ openai.api_key = API_KEY
 
 # Only compatable with chat models like gpt-3.5-turbo
 MODEL = "gpt-3.5-turbo"
+SYSTEM_PROMPT = "You are a helpful assistant."
 
 # Get the encoding for the GPT-2 model for tokenizing text
 enc = tiktoken.get_encoding("gpt2")
@@ -99,6 +100,23 @@ def replace_jargon(text,jargon_file):
 
     return text
 
+def call_openai_model(prompt,max_tokens):
+    try:
+        # Call the openai model with the section as input
+        response = openai.ChatCompletion.create(
+            model=MODEL,
+            temperature=TEMPERATURE,
+            max_tokens=max_tokens,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": prompt}
+            ]
+        )
+    except openai.Error as e:
+        print(
+            f"Error: OpenAI API call failed with status code {e.status_code} and message: {e.message}")
+        sys.exit(1)
+    return response.choices[0].message.content
 
 def process_sections(text):
     print(
@@ -112,8 +130,7 @@ def process_sections(text):
 
     # Determine section length
     section_prompt_tokens = enc.encode(intro_text + outro_text)
-    system_prompt = "You are a helpful assistant."
-    system_prompt_tokens = enc.encode(system_prompt)
+    system_prompt_tokens = enc.encode(SYSTEM_PROMPT)
     tokenized_text = enc.encode(text)
     section_length = 4000 - SECTION_RESPONSE_MAX_TOKENS - \
         len(section_prompt_tokens) - len(system_prompt_tokens)
@@ -123,23 +140,7 @@ def process_sections(text):
         section = enc.decode(section_tokens)
         section = intro_text + section + outro_text
 
-        try:
-            # Call the openai model with the section as input
-            response = openai.ChatCompletion.create(
-                model=MODEL,
-                temperature=TEMPERATURE,
-                max_tokens=SECTION_RESPONSE_MAX_TOKENS,
-                messages=[
-                    {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": section}
-                ]
-            )
-        except openai.Error as e:
-            print(
-                f"Error: OpenAI API call failed with status code {e.status_code} and message: {e.message}")
-            sys.exit(1)
-
-        answer = response.choices[0].message.content
+        answer = call_openai_model(section,SECTION_RESPONSE_MAX_TOKENS)
 
         # Filter out lines that don't start with "-" and are not blank
         filtered_lines = []
@@ -177,31 +178,14 @@ def sort_by_topic(full_notes, topics):
 
     # Determine max summary length
     topic_prompt_tokens = enc.encode(topic_intro_text + topic_outro_text)
-    system_prompt = "You are a helpful assistant."
-    system_prompt_tokens = enc.encode(system_prompt)
+    system_prompt_tokens = enc.encode(SYSTEM_PROMPT)
     full_notes_tokens = enc.encode(full_notes)
     topic_length = 4000 - len(full_notes_tokens) - \
         len(topic_prompt_tokens) - len(system_prompt_tokens)
 
     topic_input = topic_intro_text + full_notes + topic_outro_text
 
-    try:
-        # Call the openai model with the full_text_condensed as input
-        response = openai.ChatCompletion.create(
-            model=MODEL,
-            temperature=TEMPERATURE,
-            max_tokens=topic_length,
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": topic_input}
-            ]
-        )
-    except openai.Error as e:
-        print(
-            f"Error: OpenAI API call failed with status code {e.status_code} and message: {e.message}")
-        sys.exit(1)
-
-    sorted_notes = response.choices[0].message.content
+    sorted_notes = call_openai_model(topic_input,topic_length)
 
     # Remove leading and trailing blank lines
     while sorted_notes.startswith("\n"):
@@ -222,30 +206,13 @@ def process_summary(sorted_notes):
     # Determine max summary length
     summary_prompt_tokens = enc.encode(summary_intro_text + summary_outro_text)
     tokenized_text = enc.encode(sorted_notes)
-    system_prompt = "You are a helpful assistant."
-    system_prompt_tokens = enc.encode(system_prompt)
+    system_prompt_tokens = enc.encode(SYSTEM_PROMPT)
     summary_length = 4000 - len(tokenized_text) - \
         len(summary_prompt_tokens) - len(system_prompt_tokens)
 
     summary_input = summary_intro_text + sorted_notes + summary_outro_text
 
-    try:
-        # Call the openai model with the full_text_condensed as input
-        response = openai.ChatCompletion.create(
-            model=MODEL,
-            temperature=TEMPERATURE,
-            max_tokens=summary_length,
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": summary_input}
-            ]
-        )
-    except openai.Error as e:
-        print(
-            f"Error: OpenAI API call failed with status code {e.status_code} and message: {e.message}")
-        sys.exit(1)
-
-    summary_notes = response.choices[0].message.content
+    summary_notes = call_openai_model(summary_input,summary_length)
 
     # Remove leading and trailing blank lines
     while summary_notes.startswith("\n"):
@@ -297,7 +264,6 @@ def main():
     full_notes = process_sections(clean_text)
 
     # Sort notes by topic (if requested)
-
     sorted_notes = sort_by_topic(full_notes, topics)
 
     # Summarize notes and combine with sorted_notes if requested
